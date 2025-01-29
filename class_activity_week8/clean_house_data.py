@@ -40,20 +40,21 @@ df.drop_duplicates(inplace=True)
 duplicates_after = df.duplicated().sum()
 
 
-# Detect and remove outliers using IQR method
-def remove_outliers(df, column):
+# Detect and remove outliers using IQR method (for bath & price: 1.5*IQR, for total_sqft: 3.0*IQR)
+def remove_outliers(df, column, iqr_multiplier=1.5):
     Q1 = df[column].quantile(0.25)
     Q3 = df[column].quantile(0.75)
     IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
+    lower_bound = Q1 - iqr_multiplier * IQR
+    upper_bound = Q3 + iqr_multiplier * IQR
     return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
 
 # Record the number of rows before outlier removal
 outliers_before = df.shape[0]
-df = remove_outliers(df, 'bath')
-df = remove_outliers(df, 'price')
+df = remove_outliers(df, 'bath', iqr_multiplier=1.5)
+df = remove_outliers(df, 'price', iqr_multiplier=1.5)
+df = remove_outliers(df, 'total_sqft', iqr_multiplier=3.0)  # More strict filtering
 outliers_after = df.shape[0]
 
 # Compute final statistics
