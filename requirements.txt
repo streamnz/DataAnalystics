@@ -9,3 +9,11 @@ matplotlib==3.8.2
 seaborn==0.13.0
 scikit-learn==1.3.2
 wheel==0.44.0
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+xgboost
+tensorflow
+statsmodels
